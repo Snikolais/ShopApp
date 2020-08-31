@@ -1,5 +1,10 @@
 import SwiftUI
 
+extension Image {
+    
+    static var nikeLogo: Image { Image("2") }
+}
+
 struct ContentView: View {
     
     @State private var showDetail: Bool = false
@@ -12,48 +17,39 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Color(showDetail ? .backgroundWhenOpenShowDetail : .backgroundForSalePage)
-                .edgesIgnoringSafeArea(.all)
+             .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Spacer()
-                Image("2")
+                
+                Image.nikeLogo
                     .padding()
+                
                 Spacer()
                 
-                HStack (alignment: .top, spacing: 40) {
-                    topMenuButtons
-                }.foregroundColor(.staticButtonColor)
-
+                categoriesView
                 
                 Spacer()
                 
                 ZStack {
-                    
-                   cardsBehindProduct
-                    
-                    ZStack {
-                        VStack {
-  
-                         productForCard
-                        }
-                    }
+                    cardsBehindProduct
+                    productForCard
                 }
                 
                 Spacer()
                 
                 buyNowButton
-                    .padding()
+                    .padding(.bottom)
                 
                 HStack {
                     favoritesTitle
-                        .padding(.leading, 30)
+                     .padding(.leading, 30)
                     Spacer()
                 }
-                
+
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 35) {
-                        favoritesShoes
-                        
+                        favoritesShoesView
                     }
                     .padding(.horizontal)
                     .padding(5)
@@ -65,27 +61,30 @@ struct ContentView: View {
             DetailView(showDetail: $showDetail)
                 .offset(y: showDetail ? 0 : 600)
                 .animation(.spring(response: 0.5,
-                                   dampingFraction: 0.6,
+                                   dampingFraction: 0.5,
                                    blendDuration: 0))
             
         }
     }
     
-    var topMenuButtons: some View {
+    private var categoriesView: some View {
+        let titles = ["Hot", "Selling", "Pre-Sale"]
         
-    let titles = ["Hot", "Selling", "Pre-Sale"]
-        
-        return ForEach(0..<titles.count, id: \.self) { info in
-            TopMenuButtons(name: titles[info],
-                           showTop: .init(get: {self.selectedTopButtonIndex == info}, set: {_ in}),
-                           showDetail: .init(get: {self.showDetail}, set: {_ in}))
-            .onTapGesture(perform: {
-                self.selectedTopButtonIndex = info
-            })
+        return HStack (alignment: .top, spacing: 40) {
+            
+            ForEach(0..<titles.count, id: \.self) { info in
+                TopMenuButtons(name: titles[info],
+                               showTop: .init(get: {self.selectedTopButtonIndex == info}, set: {_ in}),
+                               showDetail: .init(get: {self.showDetail}, set: {_ in}))
+                    .onTapGesture(perform: {
+                        self.selectedTopButtonIndex = info
+                    })
+            }
         }
+         .foregroundColor(.staticButtonColor)
     }
     
-    var cardsBehindProduct: some View {
+    private var cardsBehindProduct: some View {
         
         ZStack {
             Spacer()
@@ -148,23 +147,25 @@ struct ContentView: View {
     
     var favoritesTitle: some View {
         Text("Favorites")
-            .font(.system(size: 19, weight: .medium, design: .rounded))
-        
-        
+         .font(.system(size: 19, weight: .medium, design: .rounded))
     }
     
-    var favoritesShoes: some View {
-        
+    var favoritesShoesView: some View {
         let imageName = ["3", "5", "1", "1"]
         
         return ForEach(0..<imageName.count, id: \.self) { index in
             FavoriteSelect(imageName: imageName[index],
-                           isSelect: .init(get: { self.selectedFavoriteItem == index}, set: {_ in}))
+                           isSelect: self.checkFavouriteIsSelected(shoeIndex: index))
                 .onTapGesture(perform: {
                     self.selectedImageName = imageName[index]
                     self.selectedFavoriteItem = index
                 })
         }
+    }
+    
+    private func checkFavouriteIsSelected(shoeIndex: Int) -> Binding<Bool> {
+        Binding(get: { self.selectedFavoriteItem == shoeIndex},
+                set: { _ in })
     }
 }
 

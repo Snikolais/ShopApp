@@ -1,4 +1,3 @@
-import Foundation
 import SwiftUI
 
 extension UIColor {
@@ -32,5 +31,8 @@ extension Color {
     
     public static var detailViewBackground: Color {
         return Color("detailViewBackground")
+        // UI+ – UIKit. UIKit(Хранит Foundation)
+        // SwiftUI (UIKit входит)
+        // Ничего не надо импортировать, если ты работаешь только с языком.
     }
 }

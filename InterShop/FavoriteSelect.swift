@@ -7,7 +7,6 @@ struct FavoriteSelect: View {
     @Binding var isSelect: Bool
     
     var body: some View {
-       
             Image(imageName)
                 .renderingMode(.original)
                 .overlay(isSelect ? RoundedRectangle(cornerRadius: 25)
@@ -17,6 +16,6 @@ struct FavoriteSelect: View {
 
 struct FavoriteSelect_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteSelect(imageName: "3", isSelect: .init(get: {true}, set: {_ in}))
+        FavoriteSelect(imageName: "3", isSelect: .constant(true))
     }
 }

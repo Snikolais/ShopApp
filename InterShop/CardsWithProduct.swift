@@ -30,7 +30,7 @@ struct CardsWithProduct: View {
 
 struct CardsWithProduct_Previews: PreviewProvider {
     static var previews: some View {
-        CardsWithProduct(imageName: "3", shoesName: "Nike", showDetail: .init(get: {false}, set: {_ in}))
+        CardsWithProduct(imageName: "3", shoesName: "Nike", showDetail: .constant(false))
     }
 }
  
